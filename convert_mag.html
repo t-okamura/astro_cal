@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>光度計算</title>
+    <script type="text/javascript" src="lumi_distance.js"></script>
+    <link rel="stylesheet" type="text/css" href="convert_mag.css"/>
+    <script type="text/x-mathjax-config"> 
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } }); 
+    </script> 
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script> 
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+</head>
+<body>
+    <h2>絶対等級と見かけ等級の変換</h2>
+    <form name="variable">
+        <input type="text" name="input_H_0" value="70"> $H_0$[km/s/Mpc] <br>
+        <input type="text" name="input_z" value="4.0"> $z$ <br>
+        <input type="text" name="input_OMEGA_M" value="0.3"> $\Omega_M$ <br>
+        <input type="text" name="input_OMEGA_L" value="0.7"> $\Omega_{\Lambda}$ <br><br>
+        <div id="Mag">
+            Absolute Magnitude
+            <input type="button" name="cal" id="cal" value="→" onclick="cal_mag()"> <br>
+            <input type="text" name="Mag" value="-18.0"> 
+            <input type="button" name="cal2" id="cal2" value="←" onclick="cal_Mag()"> 
+        </div>
+        <div id="mag">
+            Apparent Magnitude<br>
+            <input type="text" name="mag" value="28.02"> <br>
+        </div>
+    </form>
+    <br><br>
+    <p>All Magnitude are calculated by using $f_{\nu}$.<br>
+    I refer to <a href="http://d.hatena.ne.jp/yoshiyuki_kitne/20061201/p1">this cite</a> when calculating luminosity distance.
+    </p>
+</body>
+<script>
+    function cal_mag(){
+        var H_0 =  parseFloat(document.variable.input_H_0.value);    
+        var z=  parseFloat(document.variable.input_z.value);    
+        var OMEGA_M =  parseFloat(document.variable.input_OMEGA_M.value);    
+        var OMEGA_L =  parseFloat(document.variable.input_OMEGA_L.value);  
+        var lumi_dis_pc = lumi_dis(H_0,z, OMEGA_M, OMEGA_L) * 1.0e+6;
+        document.variable.mag.value = parseFloat(document.variable.Mag.value) + 5.*Math.log10(lumi_dis_pc) -5. -2.5*Math.log10(1+z);
+    }
+    function cal_Mag(){
+        var H_0 =  parseFloat(document.variable.input_H_0.value);    
+        var z=  parseFloat(document.variable.input_z.value);    
+        var OMEGA_M =  parseFloat(document.variable.input_OMEGA_M.value);    
+        var OMEGA_L =  parseFloat(document.variable.input_OMEGA_L.value);  
+        var lumi_dis_pc = lumi_dis(H_0,z, OMEGA_M, OMEGA_L) * 1.0e+6;
+        document.variable.Mag.value = parseFloat(document.variable.mag.value) - 5.*Math.log10(lumi_dis_pc) +5. +2.5*Math.log10(1+z);
+    }
+</script>
+</html>
+
+
